@@ -1,0 +1,80 @@
+.top {
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  font-family: "Josefin Sans", sans-serif;
+  z-index: 999;
+}
+
+.topLeft,
+.topRight {
+  flex: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.topCenter {
+  flex: 6;
+}
+
+.topIcon {
+  font-size: 25px;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.topImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 70%;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+.topList {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.topListItem {
+  margin-right: 20px;
+  font-size: 18px;
+  font-weight: 300;
+  cursor: pointer;
+}
+
+.topListItem:hover {
+  color: #003213; /* Change to your desired hover color */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 128, 128, 0.4);
+  border-bottom: 1px solid #11100f; /* Optional underline effect */
+}
+
+.topSearchIcon {
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.topbarLink {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+}
+
+.topbarLink:hover {
+  color: #027cef; /* Change to your desired hover color */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 128, 128, 0.4);
+  border-bottom: 1px solid #027cef; /* Optional underline effect */
+}

@@ -1,0 +1,138 @@
+.settings {
+  display: flex;
+}
+
+.settingsWrapper {
+  flex: 9;
+  padding: 20px;
+}
+
+.settingsTitle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* .settingsUpdateTitle {
+  align-self: center;
+  width: 180px;
+  padding: 12px 20px;
+  margin-top: 25px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #008080, #7b38a5);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 128, 128, 0.3);
+  transition: all 0.3s ease;
+} */
+
+.settingsDeleteTitle {
+  align-self: center;
+  border: none;
+  border-radius: 6px;
+  background-color: #c19b59;
+  color: white;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 6px 14px;
+  margin-top: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  justify-content: center;
+  display: flex;
+}
+
+.settingsDeleteTitle:hover {
+  background-color: #e60000;
+  transform: scale(1.05);
+}
+
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsPP {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.settingsPP > img {
+  height: 70px;
+  width: 70px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.settingsPPIcon {
+  width: 25px;
+  height: 25px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 50%;
+  margin-left: 10px;
+  color: white;
+  background-color: lightcoral;
+  cursor: pointer;
+}
+
+.settingsPPButton:focus {
+  outline-style: none;
+}
+
+.settingsForm > label {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.settingsPPInput {
+  width: 30%;
+}
+
+.settingsForm > input {
+  color: gray;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 30px;
+  border: none;
+  border-bottom: 1px solid lightgray;
+}
+
+.settingsSubmit {
+  align-self: center;
+  width: 180px;
+  padding: 12px 20px;
+  margin-top: 25px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #008080, #20b2aa);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 128, 128, 0.3);
+  transition: all 0.3s ease;
+}
+
+.settingsSubmit:hover {
+  background: linear-gradient(135deg, #006666, #17a2a2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 128, 128, 0.4);
+}
