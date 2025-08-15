@@ -63,11 +63,12 @@ mongoose
   })
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Backend running on port ${PORT}`);
-    });
+    app.listen(process.env.PORT || 5000, () => {
+  console.log("Backend is running.");
+  });
   })
   .catch(err => {
     console.error("MongoDB connection error:", err);
     process.exit(1);
   });
+  

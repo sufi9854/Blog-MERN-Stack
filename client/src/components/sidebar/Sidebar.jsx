@@ -9,7 +9,8 @@ export default function Sidebar() {
 
   useEffect(() => {
     const getCats = async () => {
-      const res = await axios.get("/categories");
+      const res = await axios.get("https://blog-mern-stack-mwhv.onrender.com")
+
       setCats(res.data);
     };
     getCats();
@@ -33,12 +34,16 @@ export default function Sidebar() {
       <div className="sidebarItem">
         <span className="sidebarTitle">CATEGORIES</span>
         <ul className="sidebarList">
-          {cats.map((c) => (
-            <Link to={`/?cat=${c.name}`} className="link">
-            <li className="sidebarListItem">{c.name}</li>
-            </Link>
-          ))}
-        </ul>
+           {Array.isArray(cats) && cats.length > 0 ? (
+    cats.map((c) => (
+      <Link key={c._id || c.name} to={`/?cat=${c.name}`} className="link">
+        <li className="sidebarListItem">{c.name}</li>
+      </Link>
+    ))
+  ) : (
+    <li>No categories found</li>
+  )}
+</ul>
       </div>
       <div className="sidebarItem" id="contact">
         <span className="sidebarTitle">CONTACT US</span>

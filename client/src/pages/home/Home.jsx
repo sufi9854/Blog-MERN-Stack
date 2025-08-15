@@ -24,7 +24,7 @@ export default function Home() {
   // Fetch posts when search changes
   useEffect(() => {
     const fetchPosts = async () => {
-      const res = await axios.get("/posts" + search);
+      const res = await axios.get("https://blog-mern-stack-mwhv.onrender.com" + search);
       setPosts(res.data);
     };
     fetchPosts();
