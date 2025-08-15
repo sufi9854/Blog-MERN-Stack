@@ -9,7 +9,7 @@ export default function TopBar() {
   const { user, dispatch } = useContext(Context);
   // `isRegistered` should be set in Context when the user registers
 
-  const PF = "http://localhost:5000/images/"
+  const PF = "https://blog-mern-stack-mwhv.onrender.com/images/"
   const navigate = useNavigate();
   const location = useLocation();
 
