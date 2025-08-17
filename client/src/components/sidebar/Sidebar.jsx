@@ -60,12 +60,12 @@ useEffect(() => {
           >
           <i className="sidebarIcon fab fa-linkedin"></i>
           </a>
-          <a href="mailto:sksufiyan9854@gmail.com"
-             target="_blank"
-             rel="noreferrer"
-          >
-          <i className="sidebarIcon fas fa-inbox"></i>
-          </a>
+         <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sksufiyan9854@gmail.com&su=Want%20to%20connect%20with%20you" 
+            target="_blank" 
+            rel="noopener noreferrer"
+         >
+         <i className="sidebarIcon fas fa-inbox"></i>
+        </a>
         </div>
       </div>
     </div>
