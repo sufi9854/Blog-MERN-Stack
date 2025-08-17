@@ -22,13 +22,13 @@ export default function Home() {
   }, [location]);
 
   // Fetch posts when search changes
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const res = await axios.get("https://blog-mern-stack-mwhv.onrender.com" + search);
-      setPosts(res.data);
-    };
-    fetchPosts();
-  }, [search]);
+useEffect(() => {
+  const fetchPosts = async () => {
+    const res = await axios.get(`/posts${search}`); // ✅ no need to prepend API URL
+    setPosts(res.data);
+  };
+  fetchPosts();
+}, [search]);
 
   return (
     <>

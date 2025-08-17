@@ -1,11 +1,8 @@
-import axios from '../axios';
+import axios from "axios";
 
-const API_BASE =
-  import.meta?.env?.VITE_API_URL ||
-  process.env.REACT_APP_API_URL ||
-  'https://blog-mern-stack-mwhv.onrender.com';
-
-export default axios.create({
-  baseURL: API_BASE,
+const API = axios.create({
+  baseURL: process.env.REACT_APP_API_URL + "/api",
   withCredentials: true
 });
+
+export default API;

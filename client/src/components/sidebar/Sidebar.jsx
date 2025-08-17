@@ -7,14 +7,14 @@ import { Element } from 'react-scroll';
 export default function Sidebar() {
   const [cats, setCats] = useState([]);
 
-  useEffect(() => {
-    const getCats = async () => {
-      const res = await axios.get("https://blog-mern-stack-mwhv.onrender.com")
+useEffect(() => {
+  const getCats = async () => {
+    const res = await axios.get(`/categories`); // ✅ no need to prepend API URL
+    setCats(res.data);
+  };
+  getCats();
+}, []);
 
-      setCats(res.data);
-    };
-    getCats();
-  }, []);
   return (
     <Element name="aboutSidebar">
     <div className="sidebar">
