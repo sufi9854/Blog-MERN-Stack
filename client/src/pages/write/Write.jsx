@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect,useRef } from "react";
+import { useContext, useState } from "react";
 import "./write.css";
 import axios from "../../axios";
 import { Context } from "../../context/Context";
@@ -9,56 +9,63 @@ export default function Write() {
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState(null);
   const { user } = useContext(Context);
-  const shownRef = useRef(false);
 
-  //Pop Up Toast notification for loggedout unregistered users
-  useEffect(() => {
-    if (!user && !shownRef.current) {
-      toast.warning("Login your profile to post a Blog.");
-      shownRef.current = true;
-    }
-  }, [user]);
-
-  if (!user) {
-    return null; // Don't render the form if not logged in
-  }
+  if (!user) return null; // Protect route
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!title || !desc) {
+      toast.warning("Title and description are required!");
+      return;
+    }
+
     const newPost = {
       username: user.username,
       title,
       desc,
     };
+
+    // Handle image upload
     if (file) {
-      const data =new FormData();
-      const filename = Date.now() + "-" + file.name;
-      data.append("name", filename);
-      data.append("file", file);
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+      if (!allowedTypes.includes(file.type)) {
+        toast.error("Only image files are allowed (jpg, jpeg, png, gif).");
+        return;
+      }
 
-    try {
-    const res = await axios.post("/upload", data);
-    newPost.photo = res.data.filename; // <- save filename from backend
-  } catch (err) {
-    toast.error("Failed to upload image.");
-    return;
-  }
+      const data = new FormData();
+      data.append("file", file); // key must match multer backend
+      try {
+        const res = await axios.post("/api/upload", data);
+        newPost.photo = res.data.filename; // use backend returned filename
+        toast.success("Image uploaded successfully!");
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to upload image.");
+        return;
+      }
     }
-  }
 
-  // //Write Message when user try to post without registering or login
-  // if (!user) {
-  //   return (
-  //     <div className="write-message">
-  //       <h2>Please Register or Login to write a post.</h2>
-  //     </div>
-  //   );
-  // }
+    // Create post
+    try {
+      const res = await axios.post("/api/posts", newPost);
+      toast.success("Blog posted successfully!");
+      window.location.replace("/post/" + res.data._id);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to publish post.");
+    }
+  };
 
   return (
     <div className="write">
-        {file && (
-        <img className="writeImg" src={URL.createObjectURL(file)} alt="" />
+      {file && (
+        <img
+          className="writeImg"
+          src={URL.createObjectURL(file)}
+          alt="preview"
+        />
       )}
       <form className="writeForm" onSubmit={handleSubmit}>
         <div className="writeFormGroup">
@@ -69,36 +76,30 @@ export default function Write() {
             type="file"
             id="fileInput"
             style={{ display: "none" }}
-             onChange={(e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
-      if (!allowedTypes.includes(selectedFile.type)) {
-        toast.error("Only image files are allowed (jpg, jpeg, png, gif).");
-        setFile(null); // clear file
-        return;
-      }
-      setFile(selectedFile);
-    }
-  }}
+            accept="image/*"
+            onChange={(e) => {
+              const selectedFile = e.target.files[0];
+              if (selectedFile) {
+                setFile(selectedFile);
+              }
+            }}
           />
           <input
             type="text"
             placeholder="Title"
             className="writeInput"
-            autoFocus={true}
-            onChange={e=>setTitle(e.target.value)}
+            autoFocus
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <div className="writeFormGroup">
           <textarea
             placeholder="Tell your story..."
-            type="text"
             className="writeInput writeText"
-            onChange={e=>setDesc(e.target.value)}
+            onChange={(e) => setDesc(e.target.value)}
           ></textarea>
         </div>
-        <button className="writeSubmit" type="submit"> 
+        <button className="writeSubmit" type="submit">
           Publish
         </button>
       </form>

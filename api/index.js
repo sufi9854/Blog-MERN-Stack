@@ -8,8 +8,9 @@ const categoryRoute = require("./routes/categories");
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
+const fs = require("fs");
 
-// Load env vars
+// Load environment variables
 dotenv.config();
 
 const app = express();
@@ -19,17 +20,25 @@ const allowed = (process.env.ALLOWED_ORIGINS || "").split(",").map(s => s.trim()
 app.use(
   cors({
     origin: function (origin, cb) {
-      if (!origin) return cb(null, true); // allow server-to-server and tools
+      if (!origin) return cb(null, true);
       if (allowed.includes(origin)) return cb(null, true);
       return cb(new Error("Not allowed by CORS"));
     },
-    credentials: true
+    credentials: true,
   })
 );
 
 // --- Middleware ---
 app.use(express.json());
-app.use("/images", express.static(path.join(__dirname, "/images")));
+
+// Ensure images folder exists
+const imagesDir = path.join(__dirname, "/images");
+if (!fs.existsSync(imagesDir)) {
+  fs.mkdirSync(imagesDir);
+}
+
+// Serve images statically
+app.use("/images", express.static(imagesDir));
 
 // --- Health check ---
 app.get("/health", (req, res) => res.send("ok"));
@@ -37,18 +46,25 @@ app.get("/health", (req, res) => res.send("ok"));
 // --- Multer setup for uploads ---
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "images");
+    cb(null, imagesDir);
   },
   filename: (req, file, cb) => {
-    cb(null, req.body.name);
-  }
+    // Generate unique filename with extension
+    const uniqueName =
+      Date.now() + "-" + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
+    cb(null, uniqueName);
+  },
 });
+
 const upload = multer({ storage });
+
 app.post("/api/upload", upload.single("file"), (req, res) => {
   try {
+    if (!req.file) throw new Error("No file uploaded");
     res.status(200).json({ filename: req.file.filename });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Upload error:", err);
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -62,17 +78,14 @@ app.use("/api/categories", categoryRoute);
 const PORT = process.env.PORT || 5000;
 
 mongoose
-  .connect(process.env.MONGO_URL, {
-    // You can add options here if needed
-  })
+  .connect(process.env.MONGO_URL)
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(process.env.PORT || 5000, () => {
-  console.log("Backend is running.");
-  });
+    app.listen(PORT, () => {
+      console.log(`Backend is running on port ${PORT}`);
+    });
   })
-  .catch(err => {
+  .catch((err) => {
     console.error("MongoDB connection error:", err);
     process.exit(1);
   });
-  
