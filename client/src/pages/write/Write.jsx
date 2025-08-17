@@ -32,19 +32,19 @@ export default function Write() {
     };
     if (file) {
       const data =new FormData();
-      const filename = Date.now() + file.name;
+      const filename = Date.now() + "-" + file.name;
       data.append("name", filename);
       data.append("file", file);
-      newPost.photo = filename;
-      try {
-        await axios.post("/upload", data);
-      } catch (err) {}
-    }
+
     try {
-      const res = await axios.post("/posts", newPost);
-      window.location.replace("/post/" + res.data._id);
-    } catch (err) {}
-  };
+    const res = await axios.post("/upload", data);
+    newPost.photo = res.data.filename; // <- save filename from backend
+  } catch (err) {
+    toast.error("Failed to upload image.");
+    return;
+  }
+    }
+  }
 
   // //Write Message when user try to post without registering or login
   // if (!user) {
@@ -69,7 +69,18 @@ export default function Write() {
             type="file"
             id="fileInput"
             style={{ display: "none" }}
-            onChange={(e) => setFile(e.target.files[0])}
+             onChange={(e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
+      if (!allowedTypes.includes(selectedFile.type)) {
+        toast.error("Only image files are allowed (jpg, jpeg, png, gif).");
+        setFile(null); // clear file
+        return;
+      }
+      setFile(selectedFile);
+    }
+  }}
           />
           <input
             type="text"

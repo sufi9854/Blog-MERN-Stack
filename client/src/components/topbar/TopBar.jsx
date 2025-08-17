@@ -4,6 +4,7 @@ import { Context } from "../../context/Context";
 import "./topbar.css";
 import { Link as ScrollLink } from 'react-scroll';
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function TopBar() {
   const { user, dispatch } = useContext(Context);
@@ -14,7 +15,9 @@ export default function TopBar() {
   const location = useLocation();
 
   const handleLogout = () => {
-    dispatch({ type: "LOGOUT" });
+    dispatch({ type: "LOGOUT" }); // your existing logout logic
+    toast.success("Logged out successfully"); // show toast
+    navigate("/Login"); // redirect to home
   };
 
     // Navigate to home and scroll to section
