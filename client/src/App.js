@@ -1,56 +1,68 @@
 import Home from "./pages/home/Home";
+import SinglePost from "./components/singlePost/SinglePost";
 import TopBar from "./components/topbar/TopBar";
-import Single from "./pages/single/Single";
 import Write from "./pages/write/Write";
 import Settings from "./pages/settings/Settings";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { Context } from "./context/Context";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
 
 function App() {
   const { user } = useContext(Context);
+
+  // Inline Protected wrapper component
+  const Protected = ({ user, children, message }) => {
+    const navigate = useNavigate();
+    const toastShownRef = useRef(false);
+
+    useEffect(() => {
+      if (!user && !toastShownRef.current) {
+        toastShownRef.current = true;
+        toast.warning(message || "Please login to access this page");
+        navigate("/"); // redirect to home
+      }
+    }, [user, navigate, message]); // now user is a prop, dependency is fine
+
+    return user ? children : null;
+  };
+
   return (
     <Router>
       <TopBar />
-      <RedirectOnRefresh />
       <Routes>
-  <Route path="/" element={<Home />} />
-  <Route path="/register" element={user ? <Home /> : <Register />} />
-  <Route path="/login" element={user ? <Home /> : <Login />} />
-  <Route path="/write" element={user ? <Write /> : <Write />} />
-  <Route path="/settings" element={user ? <Settings /> : <Register />} />
-  <Route path="/post/:postId" element={<Single />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/post/:id" element={<SinglePost />} />
+        <Route path="/register" element={user ? <Home /> : <Register />} />
+        <Route path="/login" element={user ? <Home /> : <Login />} />
+
+        {/* Protected routes inline */}
+        <Route
+          path="/write"
+          element={
+            <Protected user={user} message="Login your profile to post a blog">
+              <Write />
+            </Protected>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <Protected user={user} message="Please login to access Settings">
+              <Settings />
+            </Protected>
+          }
+        />
+
+        {/* Catch-all */}
+        <Route path="*" element={<Home />} />
       </Routes>
-  <ToastContainer position="top-center" autoClose={3000} />
+      <ToastContainer position="top-center" autoClose={3000} />
     </Router>
   );
-}
-
-function RedirectOnRefresh() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const navigationType = window.performance.getEntriesByType("navigation")[0]?.type;
-    const isReload = navigationType === "reload";
-
-    const path = window.location.pathname;
-    const search = window.location.search;
-
-    // Allow only main pages without redirect
-    const allowedPaths = ["/", "/login", "/register"];
-
-    // If reload happens on any ?cat= or unlisted path -> go home
-    if (isReload && (!allowedPaths.includes(path) || search.includes("cat="))) {
-      navigate("/");
-    }
-  }, [navigate]);
-
-  return null;
 }
 
 export default App;

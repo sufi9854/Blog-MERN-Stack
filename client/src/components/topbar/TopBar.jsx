@@ -42,10 +42,10 @@ export default function TopBar() {
           >
           <i className="topIcon fab fa-linkedin"></i>
           </a>
-        <a href="mailto:sksufiyan9854@gmail.com"
-             target="_blank"
-             rel="noreferrer"
-          >
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=sksufiyan9854@gmail.com&su=Want%20to%20connect%20with%20you" 
+            target="_blank" 
+            rel="noopener noreferrer"
+         >
           <i className="topIcon fas fa-inbox"></i>
           </a>
 
